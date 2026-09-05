@@ -1,0 +1,10 @@
+{
+  "modelVersion": "6.1.1",
+  "description": "Partial person detection demo for HarmonyOS",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@ohos/hypium": "1.0.25",
+    "@ohos/hamock": "1.0.0"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "HarmonyOS partial person detection demo"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "Grayscale camera person presence demo"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "部分人体检测 Demo"
+    },
+    {
+      "name": "camera_reason",
+      "value": "用于实时预览并识别画面中的人体"
+    }
+  ]
+}

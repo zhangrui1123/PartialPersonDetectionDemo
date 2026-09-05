@@ -1,0 +1,14 @@
+.idea/
+.vscode/
+*.log
+.DS_Store
+/node_modules
+**/oh_modules
+/local.properties
+**/build
+/.hvigor
+**/.cxx
+**/.test
+/.appanalyzer
+/.clangd
+recordings/

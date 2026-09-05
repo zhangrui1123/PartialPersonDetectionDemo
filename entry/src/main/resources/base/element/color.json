@@ -1,0 +1,32 @@
+{
+  "color": [
+    {
+      "name": "start_window_background",
+      "value": "#111827"
+    },
+    {
+      "name": "page_background",
+      "value": "#0F172A"
+    },
+    {
+      "name": "panel_background",
+      "value": "#1E293B"
+    },
+    {
+      "name": "text_primary",
+      "value": "#F8FAFC"
+    },
+    {
+      "name": "text_secondary",
+      "value": "#94A3B8"
+    },
+    {
+      "name": "present_color",
+      "value": "#22C55E"
+    },
+    {
+      "name": "absent_color",
+      "value": "#64748B"
+    }
+  ]
+}

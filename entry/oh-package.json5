@@ -1,0 +1,11 @@
+{
+  "name": "entry",
+  "version": "1.0.0",
+  "description": "Partial person detection entry",
+  "main": "",
+  "author": "",
+  "license": "",
+  "dependencies": {
+    "libframereceiver.so": "file:./src/main/cpp/types/libframereceiver"
+  }
+}

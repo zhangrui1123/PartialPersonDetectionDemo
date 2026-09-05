@@ -1,0 +1,56 @@
+{
+  "app": {
+    "products": [
+      {
+        "name": "default",
+        "signingConfig": "default",
+        "targetSdkVersion": "6.1.1(24)",
+        "compatibleSdkVersion": "6.1.0(23)",
+        "runtimeOS": "HarmonyOS",
+        "buildOption": {
+          "strictMode": {
+            "caseSensitiveCheck": true,
+            "useNormalizedOHMUrl": true
+          }
+        }
+      }
+    ],
+    "buildModeSet": [
+      {
+        "name": "debug"
+      },
+      {
+        "name": "release"
+      }
+    ],
+    "signingConfigs": [
+      {
+        "name": "default",
+        "type": "HarmonyOS",
+        "material": {
+          "certpath": "C:\\Users\\zhang\\.ohos\\config\\default_PartialPersonDetection_oEKB0XYB4m2hPjkSvvUDXyDBhdPEu7naA9tgiHi9HdE=.cer",
+          "keyAlias": "debugKey",
+          "keyPassword": "0000001A2399D7DDB22B26ACE8056B64B070BE3503492C40F86398DB3C517E9351F9B43B8E6DE7B36912",
+          "profile": "C:\\Users\\zhang\\.ohos\\config\\default_PartialPersonDetection_oEKB0XYB4m2hPjkSvvUDXyDBhdPEu7naA9tgiHi9HdE=.p7b",
+          "signAlg": "SHA256withECDSA",
+          "storeFile": "C:\\Users\\zhang\\.ohos\\config\\default_PartialPersonDetection_oEKB0XYB4m2hPjkSvvUDXyDBhdPEu7naA9tgiHi9HdE=.p12",
+          "storePassword": "0000001A6B5E4284070389B016B1136C0572F6AC439D504FEBF6A16362271964E0E3BA4B9768F41F9FFC"
+        }
+      }
+    ]
+  },
+  "modules": [
+    {
+      "name": "entry",
+      "srcPath": "./entry",
+      "targets": [
+        {
+          "name": "default",
+          "applyToProducts": [
+            "default"
+          ]
+        }
+      ]
+    }
+  ]
+}
