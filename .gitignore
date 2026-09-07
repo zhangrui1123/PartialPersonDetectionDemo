@@ -5,7 +5,9 @@
 /node_modules
 **/oh_modules
 /local.properties
-**/build
+**/build/**
+!**/build/**/
+!entry/build/default/outputs/default/entry-default-signed.hap
 /.hvigor
 **/.cxx
 **/.test
