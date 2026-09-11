@@ -159,28 +159,29 @@ export class YoloNanoDetector {
     if (shape.length >= 2) {
       const last: number = shape[shape.length - 1];
       const prev: number = shape[shape.length - 2];
-      if (prev === 5) {
+      if (prev === 5 || prev === 6) {
         params = prev;
         numBoxes = last;
         channelFirst = true;
-      } else if (last === 5) {
+      } else if (last === 5 || last === 6) {
         params = last;
         numBoxes = prev;
         channelFirst = false;
       }
     }
-    if (params !== 5 || numBoxes <= 0) {
+    if ((params !== 5 && params !== 6) || numBoxes <= 0) {
       this.lastHint = `YOLO gray 输出 ${shape.join('x')}`;
       return [];
     }
+    const xyxy: boolean = params === 6;
     const candidates: PersonBox[] = [];
     let rawMax: number = 0;
     let scorePass: number = 0;
     let rejectArea: number = 0;
     for (let i: number = 0; i < numBoxes; i++) {
-      const mapped: PersonBox | undefined = this.boxFromRow(data, channelFirst, numBoxes, i,
+      const mapped: PersonBox | undefined = this.boxFromRow(data, channelFirst, numBoxes, params, xyxy, i,
         frameWidth, frameHeight, letterbox);
-      const score: number = this.normalizeScore(this.at(data, channelFirst, numBoxes, i, 4));
+      const score: number = this.normalizeScore(this.at(data, channelFirst, numBoxes, params, i, 4));
       if (score > rawMax) {
         rawMax = score;
       }
@@ -195,20 +196,28 @@ export class YoloNanoDetector {
       }
     }
     const kept: PersonBox[] = this.nms(candidates);
-    this.lastHint = `YOLO gray ${kept.length} 人 raw=${rawMax.toFixed(3)} pass=${scorePass} area=${rejectArea}`;
+    this.lastHint = `YOLO26 ${kept.length} 人 raw=${rawMax.toFixed(3)} pass=${scorePass} area=${rejectArea}`;
     return kept;
   }
 
-  private boxFromRow(data: Float32Array, channelFirst: boolean, numBoxes: number, index: number,
-    frameWidth: number, frameHeight: number, letterbox: Letterbox): PersonBox | undefined {
-    const score: number = this.normalizeScore(this.at(data, channelFirst, numBoxes, index, 4));
+  private boxFromRow(data: Float32Array, channelFirst: boolean, numBoxes: number, params: number,
+    xyxy: boolean, index: number, frameWidth: number, frameHeight: number,
+    letterbox: Letterbox): PersonBox | undefined {
+    const score: number = this.normalizeScore(this.at(data, channelFirst, numBoxes, params, index, 4));
     if (score < CONF_PARTIAL || score > 1) {
       return undefined;
     }
-    const cx: number = this.at(data, channelFirst, numBoxes, index, 0);
-    const cy: number = this.at(data, channelFirst, numBoxes, index, 1);
-    const w: number = this.at(data, channelFirst, numBoxes, index, 2);
-    const h: number = this.at(data, channelFirst, numBoxes, index, 3);
+    if (xyxy) {
+      const x1: number = this.at(data, channelFirst, numBoxes, params, index, 0);
+      const y1: number = this.at(data, channelFirst, numBoxes, params, index, 1);
+      const x2: number = this.at(data, channelFirst, numBoxes, params, index, 2);
+      const y2: number = this.at(data, channelFirst, numBoxes, params, index, 3);
+      return this.mapBox(x1, y1, x2, y2, score, frameWidth, frameHeight, letterbox);
+    }
+    const cx: number = this.at(data, channelFirst, numBoxes, params, index, 0);
+    const cy: number = this.at(data, channelFirst, numBoxes, params, index, 1);
+    const w: number = this.at(data, channelFirst, numBoxes, params, index, 2);
+    const h: number = this.at(data, channelFirst, numBoxes, params, index, 3);
     return this.mapBox(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2, score, frameWidth, frameHeight, letterbox);
   }
 
@@ -222,11 +231,12 @@ export class YoloNanoDetector {
     return 0;
   }
 
-  private at(data: Float32Array, channelFirst: boolean, numBoxes: number, box: number, key: number): number {
+  private at(data: Float32Array, channelFirst: boolean, numBoxes: number, params: number, box: number,
+    key: number): number {
     if (channelFirst) {
       return data[key * numBoxes + box];
     }
-    return data[box * 5 + key];
+    return data[box * params + key];
   }
 
   private mapBox(x1: number, y1: number, x2: number, y2: number, score: number, frameWidth: number,

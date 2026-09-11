@@ -29,7 +29,7 @@ struct Index {
   private xController: XComponentController = new XComponentController();
   private cameraSession: CameraSession | undefined = undefined;
   private yolo: YoloNanoDetector = new YoloNanoDetector();
-  private tracker: PresenceTracker = new PresenceTracker(1, 5);
+  private tracker: PresenceTracker = new PresenceTracker(1000);
   private surfaceReady: boolean = false;
   private started: boolean = false;
   private context: common.UIAbilityContext | undefined = undefined;

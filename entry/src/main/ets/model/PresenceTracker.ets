@@ -1,13 +1,11 @@
 export class PresenceTracker {
-  private enterFrames: number;
-  private exitFrames: number;
+  private confirmMs: number;
   private present: boolean = false;
-  private seen: number = 0;
-  private missed: number = 0;
+  private pending: boolean | undefined = undefined;
+  private pendingSince: number = 0;
 
-  constructor(enterFrames: number = 3, exitFrames: number = 10) {
-    this.enterFrames = enterFrames;
-    this.exitFrames = exitFrames;
+  constructor(confirmMs: number = 1000) {
+    this.confirmMs = confirmMs;
   }
 
   isPresent(): boolean {
@@ -15,20 +13,22 @@ export class PresenceTracker {
   }
 
   update(detected: boolean): boolean {
-    if (detected) {
-      this.seen += 1;
-      this.missed = 0;
-      if (!this.present && this.seen >= this.enterFrames) {
-        this.present = true;
-        return true;
-      }
-    } else {
-      this.missed += 1;
-      this.seen = 0;
-      if (this.present && this.missed >= this.exitFrames) {
-        this.present = false;
-        return true;
-      }
+    const now: number = Date.now();
+    if (detected === this.present) {
+      this.pending = undefined;
+      this.pendingSince = 0;
+      return false;
+    }
+    if (this.pending !== detected) {
+      this.pending = detected;
+      this.pendingSince = now;
+      return false;
+    }
+    if (now - this.pendingSince >= this.confirmMs) {
+      this.present = detected;
+      this.pending = undefined;
+      this.pendingSince = 0;
+      return true;
     }
     return false;
   }
